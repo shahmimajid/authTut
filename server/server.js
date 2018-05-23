@@ -3,11 +3,15 @@ const express = require('express');
 const uuid = require('uuid/v4');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
+const bodyParser = require('body-parser');
+
 
 // create the server
 const app = express();
 
 // add & configure middleware
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(session({
     genid: (req) => {
       console.log('Inside the session middleware')
@@ -26,7 +30,7 @@ app.get('/', (req, res) => {
     console.log(req.sessionID)
     res.send(`You hit home page!\n`)
   })
-  
+
 // create the login get and post routes
 app.get('/login', (req, res) => {
     console.log('Inside GET /login callback function')
