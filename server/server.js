@@ -1,15 +1,28 @@
 //npm modules
 const express = require('express');
 const uuid = require('uuid/v4');
+const session = require('express-session');
 
 // create the server
 const app = express();
 
+// add & configure middleware
+app.use(session({
+    genid: (req) => {
+      console.log('Inside the session middleware')
+      console.log(req.sessionID)
+      return uuid() // use UUIDs for session IDs
+    },
+    secret: 'this is Malaysia',
+    resave: false,
+    saveUninitialized: true
+  }))
+
 // create the homepage route at '/'
 app.get('/', (req, res) => {
-    console.log(req)
-    const uniqueId = uuid()
-    res.send(`Hit home page. Received the unique id: ${uniqueId}\n`)
+    console.log('Inside the homepage callback function')
+    console.log(req.sessionID)
+    res.send(`You hit home page!\n`)
   })
 
 // tell the server what port to listen on
